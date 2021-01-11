@@ -5,6 +5,7 @@ import line from '../../assets/images/line.png'
 
 class Results extends React.Component {
     render() {
+        console.log(this.props);
         return (
             <div className="results-component">
                 <div className="container">

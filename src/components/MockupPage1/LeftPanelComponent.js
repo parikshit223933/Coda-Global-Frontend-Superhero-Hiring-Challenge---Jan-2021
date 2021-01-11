@@ -2,7 +2,7 @@ import React from 'react'
 import './LeftPanelComponent.scss'
 import partition from '../../assets/images/divider-clipart-fancy-7.png'
 import UserCardComponent from './subComponents/UserCardComponent'
-
+import {Link} from 'react-router-dom'
 class LeftPanelComponent extends React.Component {
     render() {
         return (
@@ -33,7 +33,9 @@ class LeftPanelComponent extends React.Component {
                     })}
                 </div>
                 <div className="text-center px-5">
-                    <button
+                    <Link
+                        to={'/results'}
+                        params={{ bucket: this.props.bucket }}
                         type="button"
                         className="btn w-100 position-absolute start-button"
                         style={{
@@ -43,7 +45,7 @@ class LeftPanelComponent extends React.Component {
                         }}
                     >
                         START
-                    </button>
+                    </Link>
                 </div>
             </div>
         )
