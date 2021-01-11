@@ -1,9 +1,71 @@
 import React from 'react'
 import './RightPanelComponent.scss'
 import UserDetails from './subComponents/UserDetails'
-import UserCardComponent from './subComponents/UserCardComponent'
-
+import data from '../../assets/data'
 class RightPanelComponent extends React.Component {
+    constructor() {
+        super()
+        this.state = {
+            data,
+            range: [0, 9],
+            searchString: '',
+            activePage: 1,
+        }
+    }
+    togglePage(page) {
+        if (page === 1) {
+            this.setState({
+                ...this.state,
+                range: [0, 9],
+                activePage: 1,
+            })
+        } else if (page === 2) {
+            this.setState({
+                ...this.state,
+                range: [10, 19],
+                activePage: 2,
+            })
+        } else if (page === 3) {
+            this.setState({
+                ...this.state,
+                range: [20, 29],
+                activePage: 3,
+            })
+        }
+    }
+    getArray() {
+        const usable_data = []
+        for (let i = this.state.range[0]; i <= this.state.range[1]; i++) {
+            usable_data.push(this.state.data[i])
+        }
+        return usable_data
+    }
+    handleSearchChange(e) {
+        this.setState({
+            ...this.state,
+            searchString: e.target.value,
+        })
+    }
+    toggleNext() {
+        if (this.state.activePage === 3) {
+            return
+        }
+        this.setState({
+            ...this.state,
+            activePage: this.state.activePage + 1,
+        })
+        this.togglePage(this.state.activePage + 1)
+    }
+    togglePrevious() {
+        if (this.state.activePage === 1) {
+            return
+        }
+        this.setState({
+            ...this.state,
+            activePage: this.state.activePage - 1,
+        })
+        this.togglePage(this.state.activePage - 1)
+    }
     render() {
         return (
             <div
@@ -22,12 +84,17 @@ class RightPanelComponent extends React.Component {
                         style={{ left: 0, top: 52, color: '#a0a0a0' }}
                     ></i>
                     <input
+                        value={this.state.searchString}
+                        onChange={(e) => this.handleSearchChange(e)}
                         type="text"
                         placeholder="Search Players"
                         style={{ width: '340px', paddingLeft: 25 }}
                     />
                 </div>
-                <div className="table-container" style={{height:'69vh', overflow:'scroll'}}>
+                <div
+                    className="table-container"
+                    style={{ height: '69vh', overflow: 'scroll' }}
+                >
                     <table className="table">
                         <thead>
                             <tr>
@@ -57,16 +124,20 @@ class RightPanelComponent extends React.Component {
                             </tr>
                         </thead>
                         <tbody>
-                            <UserDetails />
-                            <UserDetails />
-                            <UserDetails />
-                            <UserDetails />
-                            <UserDetails />
-                            <UserDetails />
-                            <UserDetails />
-                            <UserDetails />
-                            <UserDetails />
-                            <UserDetails />
+                            {this.getArray().map((data, index) => {
+                                return (
+                                    <UserDetails
+                                        addPerson={this.props.addPerson}
+                                        removePerson={this.props.removePerson}
+                                        person={data}
+                                        key={index}
+                                        name={data.Name}
+                                        price={data.Price}
+                                        bet={data.Bet}
+                                        image={data['Profile Image']}
+                                    />
+                                )
+                            })}
                         </tbody>
                     </table>
                 </div>
@@ -74,37 +145,58 @@ class RightPanelComponent extends React.Component {
                     <nav aria-label="Page navigation">
                         <ul className="pagination">
                             <li className="page-item">
-                                <a
+                                <div
+                                    onClick={() => this.togglePrevious()}
                                     className="page-link"
-                                    href="#"
                                     aria-label="Previous"
                                 >
                                     <span aria-hidden="true">&laquo;</span>
-                                </a>
+                                </div>
                             </li>
-                            <li className="page-item">
-                                <a className="page-link" href="#">
-                                    1
-                                </a>
-                            </li>
-                            <li className="page-item">
-                                <a className="page-link" href="#">
-                                    2
-                                </a>
-                            </li>
-                            <li className="page-item">
-                                <a className="page-link" href="#">
-                                    3
-                                </a>
-                            </li>
-                            <li className="page-item">
-                                <a
+                            <li
+                                className={`page-item ${
+                                    this.state.activePage === 1 ? 'active' : ''
+                                }`}
+                            >
+                                <div
                                     className="page-link"
-                                    href="#"
+                                    onClick={() => this.togglePage(1)}
+                                >
+                                    1
+                                </div>
+                            </li>
+                            <li
+                                className={`page-item ${
+                                    this.state.activePage === 2 ? 'active' : ''
+                                }`}
+                            >
+                                <div
+                                    className="page-link"
+                                    onClick={() => this.togglePage(2)}
+                                >
+                                    2
+                                </div>
+                            </li>
+                            <li
+                                className={`page-item ${
+                                    this.state.activePage === 3 ? 'active' : ''
+                                }`}
+                            >
+                                <div
+                                    className="page-link"
+                                    onClick={() => this.togglePage(3)}
+                                >
+                                    3
+                                </div>
+                            </li>
+                            <li className="page-item">
+                                <div
+                                    className="page-link"
                                     aria-label="Next"
+                                    onClick={() => this.toggleNext()}
                                 >
                                     <span aria-hidden="true">&raquo;</span>
-                                </a>
+                                </div>
                             </li>
                         </ul>
                     </nav>

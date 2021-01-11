@@ -1,5 +1,4 @@
 import React from 'react'
-import dice from '../../assets/images/dice_PNG15.png'
 import './LeftPanelComponent.scss'
 import partition from '../../assets/images/divider-clipart-fancy-7.png'
 import UserCardComponent from './subComponents/UserCardComponent'
@@ -22,17 +21,16 @@ class LeftPanelComponent extends React.Component {
                     className="players"
                     style={{ height: '56vh', overflowY: 'scroll' }}
                 >
-                    <UserCardComponent />
-                    <UserCardComponent />
-                    <UserCardComponent />
-                    <UserCardComponent />
-                    <UserCardComponent />
-                    <UserCardComponent />
-                    <UserCardComponent />
-                    <UserCardComponent />
-                    <UserCardComponent />
-                    <UserCardComponent />
-                    <UserCardComponent />
+                    {this.props.bucket.map((person) => {
+                        return (
+                            <UserCardComponent
+                                name={person.Name}
+                                image={person['Profile Image']}
+                                price={person.Price}
+                                bet={person.Bet}
+                            />
+                        )
+                    })}
                 </div>
                 <div className="text-center px-5">
                     <button
